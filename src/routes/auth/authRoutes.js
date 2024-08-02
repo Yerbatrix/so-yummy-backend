@@ -8,8 +8,9 @@ const {
   uploadAvatar,
   logout,
 } = require("../../controllers/auth/authController");
-const auth = require("../../middleware/auth");
-const upload = require("../../config/multer");
+const upload = require("../../middleware/upload");
+const passport = require("passport");
+const auth = passport.authenticate("jwt", { session: false });
 
 /**
  * @swagger
@@ -113,9 +114,9 @@ router.put("/user", auth, updateUserInfo);
 
 /**
  * @swagger
- * /auth/user:
+ * /auth/avatar:
  *   put:
- *     summary: Update user information
+ *     summary: Update user avatar
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -124,22 +125,18 @@ router.put("/user", auth, updateUserInfo);
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
  *               avatar:
  *                 type: string
  *                 format: binary
  *     responses:
  *       200:
- *         description: Successfully updated user information
+ *         description: Successfully updated user avatar
  *       400:
  *         description: Bad request
  *       401:
  *         description: Unauthorized
  */
-router.put("/avatar", auth, upload.single("avatar"), updateUserInfo);
+router.put("/avatar", auth, upload.single("avatar"), uploadAvatar);
 
 /**
  * @swagger

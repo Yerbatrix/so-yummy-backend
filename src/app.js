@@ -10,6 +10,7 @@ const { swaggerUI, swaggerDocs } = require("./config/swagger");
 const authRoutes = require("./routes/auth/authRoutes");
 const recipeRoutes = require("./routes/recipes/recipeRoutes");
 const errorHandler = require("./middleware/errorHandler");
+const passport = require("./config/passport");
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors());
+app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -39,6 +41,9 @@ app.use(errorHandler);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
+  .catch((error) => {
+    console.log("Database connection error:", error.message);
+    process.exit(1);
+  });
 
 module.exports = app;

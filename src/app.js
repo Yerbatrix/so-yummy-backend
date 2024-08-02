@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -12,6 +14,11 @@ const errorHandler = require("./middleware/errorHandler");
 dotenv.config();
 
 const app = express();
+
+const uploadsDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 

@@ -1,6 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { register, signin } = require("../../controllers/auth/authController");
+const {
+  register,
+  signin,
+  getUserInfo,
+  updateUserInfo,
+  uploadAvatar,
+  logout,
+} = require("../../controllers/auth/authController");
+const auth = require("../../middleware/auth");
+const upload = require("../../config/multer");
 
 /**
  * @swagger
@@ -60,5 +69,90 @@ router.post("/register", register);
  *         description: Invalid Credentials
  */
 router.post("/signin", signin);
+
+/**
+ * @swagger
+ * /auth/user:
+ *   get:
+ *     summary: Get user information
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user information
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/user", auth, getUserInfo);
+
+/**
+ * @swagger
+ * /auth/user:
+ *   put:
+ *     summary: Update user information
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully updated user information
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ */
+router.put("/user", auth, updateUserInfo);
+
+/**
+ * @swagger
+ * /auth/user:
+ *   put:
+ *     summary: Update user information
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Successfully updated user information
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ */
+router.put("/avatar", auth, upload.single("avatar"), updateUserInfo);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout a user
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *       401:
+ *         description: Unauthorized
+ */
+router.post("/logout", auth, logout);
 
 module.exports = router;

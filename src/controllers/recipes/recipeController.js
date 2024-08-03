@@ -3,7 +3,7 @@ const Recipe = require("../../models/Recipe");
 // Get all recipes
 const getRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.find({ user: req.user.id });
+    const recipes = await Recipe.find();
     res.json(recipes);
   } catch (err) {
     console.error(err.message);
@@ -21,7 +21,7 @@ const getRecipeById = async (req, res) => {
     res.json(recipe);
   } catch (err) {
     console.error(err.message);
-    if (err.kind === 'ObjectId') {
+    if (err.kind === "ObjectId") {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }
     res.status(500).send("Server error");
@@ -30,13 +30,28 @@ const getRecipeById = async (req, res) => {
 
 // Add a recipe
 const createRecipe = async (req, res) => {
-  const { title, ingredients, instructions } = req.body;
+  const {
+    title,
+    category,
+    area,
+    instructions,
+    description,
+    thumb,
+    preview,
+    time,
+    ingredients,
+  } = req.body;
   try {
     const newRecipe = new Recipe({
       title,
-      ingredients,
+      category,
+      area,
       instructions,
-      user: req.user.id,
+      description,
+      thumb,
+      preview,
+      time,
+      ingredients,
     });
     const recipe = await newRecipe.save();
     res.json(recipe);
@@ -46,8 +61,29 @@ const createRecipe = async (req, res) => {
   }
 };
 
+// Search recipes by keyword
+const searchRecipes = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+    if (!keyword) {
+      return res
+        .status(400)
+        .json({ message: 'Parametr query "keyword" jest wymagany' });
+    }
+    const regex = new RegExp(keyword, "i"); // Case-insensitive regex for partial match
+    const recipes = await Recipe.find({ title: { $regex: regex } });
+    if (recipes.length === 0) {
+      return res.status(404).json({ message: "Sorry! Recipe not found" });
+    }
+    res.json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getRecipes,
   getRecipeById,
-  createRecipe
+  createRecipe,
+  searchRecipes,
 };

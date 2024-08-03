@@ -155,6 +155,48 @@ const swaggerOptions = {
             },
           },
         },
+        User: {
+          type: "object",
+          required: ["name", "email", "password"],
+          properties: {
+            _id: {
+              type: "string",
+              description: "The auto-generated id of the user",
+            },
+            name: {
+              type: "string",
+              description: "Name of the user",
+            },
+            email: {
+              type: "string",
+              description: "Email of the user",
+            },
+            password: {
+              type: "string",
+              description: "Password of the user",
+            },
+            daysInApp: {
+              type: "number",
+              description: "Number of days the user has been in the app",
+            },
+            recipesAdded: {
+              type: "number",
+              description: "Number of recipes added by the user",
+            },
+            favoriteRecipesCount: {
+              type: "number",
+              description: "Number of favorite recipes of the user",
+            },
+            jwtToken: {
+              type: "string",
+              description: "JWT token of the user",
+            },
+            avatar: {
+              type: "string",
+              description: "Avatar URL of the user",
+            },
+          },
+        },
       },
     },
   },

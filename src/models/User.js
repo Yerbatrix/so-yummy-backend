@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const Joi = require("joi");
+const bcrypt = require("bcryptjs");
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -36,6 +38,14 @@ const UserSchema = new mongoose.Schema({
     default: null,
   },
 });
+
+UserSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(6));
+};
+
+UserSchema.methods.validPassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 const userValidationSchema = Joi.object({
   name: Joi.string().required(),

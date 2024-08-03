@@ -5,12 +5,10 @@ const {
   signin,
   getUserInfo,
   updateUserInfo,
-  uploadAvatar,
   logout,
 } = require("../../controllers/auth/authController");
-const auth = require("../../middleware/auth");
-const upload = require("../../config/multer");
-
+const passport = require("passport");
+const auth = passport.authenticate("jwt", { session: false });
 /**
  * @swagger
  * /api/auth/register:
@@ -110,36 +108,6 @@ router.get("/user", auth, getUserInfo);
  *         description: Unauthorized
  */
 router.put("/user", auth, updateUserInfo);
-
-/**
- * @swagger
- * /auth/user:
- *   put:
- *     summary: Update user information
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               avatar:
- *                 type: string
- *                 format: binary
- *     responses:
- *       200:
- *         description: Successfully updated user information
- *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized
- */
-router.put("/avatar", auth, upload.single("avatar"), updateUserInfo);
 
 /**
  * @swagger

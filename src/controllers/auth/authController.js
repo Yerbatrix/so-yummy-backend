@@ -1,31 +1,30 @@
-const { User, userValidationSchema } = require("../../models/User");
-const bcrypt = require("bcrypt");
+const { User } = require("../../models/User");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const path = require("path");
+const fs = require("fs").promises;
+const { v4: uuidv4 } = require("uuid");
 
 // signup
 exports.register = async (req, res, next) => {
+  const { name, email, password } = req.body;
   try {
-    const { error } = userValidationSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ msg: error.details[0].message });
+    let existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ msg: "Email in use" });
     }
-
-    const { name, email, password } = req.body;
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: "User already exists" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user = new User({ name, email, password: hashedPassword });
-    await user.save();
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const newUser = new User({
+      name,
+      email,
     });
-    user.jwtToken = token;
-    await user.save();
-
-    res.status(201).json({ token });
+    newUser.setPassword(password);
+    await newUser.save();
+    res.status(201).json({
+      user: {
+        name,
+        email,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -33,20 +32,25 @@ exports.register = async (req, res, next) => {
 
 // signin
 exports.signin = async (req, res, next) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+    if (!user || !user.validPassword(password)) {
+      return res.status(401).json({ msg: "Email or password is wrong" });
     }
-
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    const payload = { id: user._id, email: user.email };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     user.jwtToken = token;
     await user.save();
-
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
   } catch (err) {
     next(err);
   }
@@ -68,27 +72,6 @@ exports.updateUserInfo = async (req, res, next) => {
       new: true,
     }).select("-password -jwtToken");
     res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.uploadAvatar = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
-
-    // Usunięcie starego avatara jeśli istnieje
-    if (user.avatar) {
-      fs.unlinkSync(path.join(__dirname, "../../uploads", user.avatar));
-    }
-
-    user.avatar = req.file.filename;
-    await user.save();
-    res.json({ msg: "Avatar uploaded successfully", avatar: user.avatar });
   } catch (err) {
     next(err);
   }

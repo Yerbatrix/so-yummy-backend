@@ -1,35 +1,15 @@
-const express = require("express");
+const express = require('express');
+const { getRecipes, getRecipeById, createRecipe } = require('../../controllers/recipes/recipeController');
+// const authMiddleware = require('../../middleware/auth');
+
 const router = express.Router();
-const Recipe = require("../../models/Recipe");
-const auth = require("../../middleware/auth");
 
-// Get all recipes
-router.get("/", auth, async (req, res) => {
-  try {
-    const recipes = await Recipe.find({ user: req.user.id });
-    res.json(recipes);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-});
+// router.get('/', authMiddleware, getRecipes);
+// router.get('/:id', authMiddleware, getRecipeById);
+// router.post('/', authMiddleware, createRecipe);
 
-// Add a recipe
-router.post("/", auth, async (req, res) => {
-  const { title, ingredients, instructions } = req.body;
-  try {
-    const newRecipe = new Recipe({
-      title,
-      ingredients,
-      instructions,
-      user: req.user.id,
-    });
-    const recipe = await newRecipe.save();
-    res.json(recipe);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-});
+router.get('/', getRecipes);
+router.get('/:id', getRecipeById);
+router.post('/', createRecipe);
 
 module.exports = router;

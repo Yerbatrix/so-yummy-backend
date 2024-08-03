@@ -37,6 +37,10 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  subscription: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.methods.setPassword = function (password) {

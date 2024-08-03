@@ -1,9 +1,6 @@
 const { User } = require("../../models/User");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const path = require("path");
-const fs = require("fs").promises;
-const { v4: uuidv4 } = require("uuid");
 
 // signup
 exports.register = async (req, res, next) => {

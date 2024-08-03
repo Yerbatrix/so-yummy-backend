@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-// const { swaggerUI, swaggerDocs } = require("./config/swagger");
+const { swaggerUI, swaggerDocs } = require("./config/swagger");
 const authRoutes = require("./routes/auth/authRoutes");
 const recipeRoutes = require("./routes/recipes/recipeRoutes");
 const categoriesRoutes = require("./routes/categoriesList/categoriesListRoutes");
@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 
-// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // Middleware
 app.use(express.json());

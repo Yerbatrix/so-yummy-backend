@@ -24,6 +24,7 @@ const subscription = async (req, res) => {
     if (user && user.subscription === false) {
       await emailSubscription.sendEmail(email);
       user.subscription = true;
+      await user.save();
       return res.json({
         status: "success",
         code: 200,

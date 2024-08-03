@@ -77,49 +77,6 @@ exports.updateUserInfo = async (req, res, next) => {
   }
 };
 
-exports.uploadAvatar = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
-
-    // Sprawdzenie, czy użytkownik ma już avatar
-    if (user.avatar) {
-      const oldAvatarPath = path.join(__dirname, "../../uploads", user.avatar);
-      try {
-        await fs.unlink(oldAvatarPath);
-        console.log(`Deleted old avatar: ${oldAvatarPath}`);
-      } catch (err) {
-        if (err.code !== "ENOENT") {
-          console.error(`Failed to delete old avatar: ${oldAvatarPath}`, err);
-          return next(err); // Zakończ funkcję w przypadku błędu
-        }
-      }
-      user.avatar = null; // Ustawienie właściwości avatar na null
-      await user.save();
-    }
-
-    // Upload nowego avatara
-    const newAvatarName = `${uuidv4()}-${req.file.originalname}`;
-    const newAvatarPath = path.join(__dirname, "../../uploads", newAvatarName);
-    try {
-      await fs.rename(req.file.path, newAvatarPath);
-    } catch (err) {
-      console.error("Failed to move the new avatar file:", err);
-      return next(err);
-    }
-
-    user.avatar = newAvatarName;
-    await user.save();
-    res.json({ msg: "Avatar uploaded successfully", avatar: user.avatar });
-  } catch (err) {
-    console.error("Error uploading avatar:", err);
-    res.status(500).json({ msg: "Server error" });
-  }
-};
-
 exports.logout = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);

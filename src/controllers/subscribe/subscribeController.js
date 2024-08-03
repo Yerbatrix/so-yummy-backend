@@ -1,6 +1,5 @@
 const { User } = require("../../models/User");
 const emailSubscription = require("../../email/email");
-// const subscriptionService = require("../../services/subscriptionService");
 
 const subscription = async (req, res) => {
   const { email } = req.body;

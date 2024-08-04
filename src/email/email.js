@@ -2,8 +2,6 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 const { M_USER, M_PASS } = process.env;
 
-console.log(M_PASS);
-
 const transporter = nodemailer.createTransport({
   host: "smtp.mailgun.org",
   port: 587,

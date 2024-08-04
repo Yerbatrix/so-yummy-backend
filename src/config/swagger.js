@@ -155,6 +155,64 @@ const swaggerOptions = {
             },
           },
         },
+        Category: {
+          type: "object",
+          required: ["title"],
+          properties: {
+            _id: {
+              type: "string",
+              description: "The auto-generated id of the category",
+            },
+            title: {
+              type: "string",
+              description: "Title of the category",
+            },
+            thumb: {
+              type: "string",
+              description: "Thumbnail image URL of the category",
+            },
+            description: {
+              type: "string",
+              description: "Description of the category",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              description: "Date when the category was created",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+              description: "Date when the category was last updated",
+            },
+          },
+        },
+        Ingredient: {
+          type: "object",
+          required: ["ttl", "desc", "thb"],
+          properties: {
+            _id: {
+              type: "string",
+              description: "The auto-generated id of the ingredient",
+            },
+            ttl: {
+              type: "string",
+              description: "Title of the ingredient",
+            },
+            desc: {
+              type: "string",
+              description: "Description of the ingredient",
+            },
+            t: {
+              type: "string",
+              description: "Additional info of the ingredient",
+            },
+            thb: {
+              type: "string",
+              description: "Thumbnail image URL of the ingredient",
+            },
+          },
+        },
       },
     },
   },

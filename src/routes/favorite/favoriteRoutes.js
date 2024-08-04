@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
+const favoritesController = require("../../controllers/favorites/favoritesController");
+const auth = passport.authenticate("jwt", { session: false });
 
-const favoritesController = require("../../controllers/categories/categoriesController");
-
-router.post("/", categoriesController.get);
+router.post("/", auth, favoritesController.addToFavorites);
 
 module.exports = router;

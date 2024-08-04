@@ -34,7 +34,7 @@ app.use(passport.initialize());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use("/api/recipes/:id/favorite", favoriteRoutes);
+app.use("/api", favoriteRoutes);
 // Error handling middleware
 app.use(errorHandler);
 

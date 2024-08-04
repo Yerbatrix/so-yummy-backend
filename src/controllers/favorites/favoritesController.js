@@ -6,7 +6,7 @@ const addToFavorites = async (req, res, next) => {
     const { _id: userId } = req.user;
     const result = await favoriteService.updateFavoriteStatus(id, userId);
 
-    res.json({ status: "success", code: 200, data: { recipe: result } });
+    res.json({ status: "success", code: 200, data: { result } });
   } catch (e) {
     console.error(e);
     next(e);

@@ -22,7 +22,7 @@ const getRecipeById = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(404).json({ message: "Sorry! Recipe not foundddd" });
+      return res.status(404).json({ message: "Sorry! Recipe not found" });
     }
     res.status(500).send("Server error");
   }

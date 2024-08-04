@@ -3,6 +3,6 @@ const router = express.Router();
 
 const categoriesController = require("../../controllers/categories/categoriesController");
 
-router.get("/recipes/category-list", categoriesController.get);
+router.get("/", categoriesController.get);
 
 module.exports = router;

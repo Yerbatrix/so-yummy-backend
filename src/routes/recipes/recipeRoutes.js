@@ -36,7 +36,7 @@ const router = express.Router();
  *       404:
  *         description: No recipes found matching the keyword
  */
-router.get("/search", searchRecipes);
+router.get("/recipes/search", searchRecipes);
 
 /**
  * @swagger

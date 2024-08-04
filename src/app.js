@@ -9,6 +9,7 @@ const cors = require("cors");
 const { swaggerUI, swaggerDocs } = require("./config/swagger");
 const authRoutes = require("./routes/auth/authRoutes");
 const recipeRoutes = require("./routes/recipes/recipeRoutes");
+const categoriesRoutes = require("./routes/categories/categoriesListRoutes");
 const subscribeRoutes = require("./routes/subscribe/subscribeRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const passport = require("./config/passport");
@@ -33,6 +34,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/recipes/category-list", categoriesRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/subscribe", subscribeRoutes);
 

@@ -35,7 +35,8 @@ app.use(passport.initialize());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use(ingredientsRoutes);
+app.use("/api/ingredients",ingredientsRoutes);
+
 // Error handling middleware
 app.use(errorHandler);
 

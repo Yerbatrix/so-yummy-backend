@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ingredientsController = require("../../controllers/ingredients/ingredientsController");
 
-router.get("/api/ingredients/list", ingredientsController.getIngredientsList);
-router.get("/api/ingredients", ingredientsController.getReceipeByIngredient);
+router.get("/list", ingredientsController.getIngredientsList);
+router.get("/", ingredientsController.getReceipeByIngredient);
 
 module.exports = router;

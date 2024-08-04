@@ -37,6 +37,10 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
+  subscription: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.methods.setPassword = function (password) {
@@ -56,3 +60,4 @@ const userValidationSchema = Joi.object({
 const User = mongoose.model("User", UserSchema);
 
 module.exports = { User, userValidationSchema };
+  

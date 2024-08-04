@@ -13,6 +13,18 @@ const addToFavorites = async (req, res, next) => {
   }
 };
 
+const getFavorites = async (req, res, next) => {
+  try {
+    const { user } = req;
+    const results = await favoriteService.getUserFavorites(user._id);
+    res.json({ status: "success", code: 200, data: { contacts: results } });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
 module.exports = {
   addToFavorites,
+  getFavorites,
 };

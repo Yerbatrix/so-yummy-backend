@@ -4,6 +4,11 @@ const passport = require("passport");
 const favoritesController = require("../../controllers/favorites/favoritesController");
 const auth = passport.authenticate("jwt", { session: false });
 
-router.post("/recipes/:id/favorite", auth, favoritesController.addToFavorites);
+router.post(
+  "/api/recipes/:id/favorite",
+  auth,
+  favoritesController.addToFavorites
+);
+router.get("/api/user/favorite", auth, favoritesController.getFavorites);
 
 module.exports = router;

@@ -2,13 +2,17 @@
 const Recipe = require("../models/Recipe");
 
 const updateFavoriteStatus = async (recipeId, userId) => {
-  console.log("Updating recipe:", recipeId, "with user:", userId);
   return Recipe.findByIdAndUpdate(
     recipeId,
     { $addToSet: { favorites: userId } },
     { new: true, upsert: false }
   );
 };
+
+const getUserFavorites = async (userId) => {
+  return Recipe.find({ favorites: userId });
+};
 module.exports = {
   updateFavoriteStatus,
+  getUserFavorites,
 };

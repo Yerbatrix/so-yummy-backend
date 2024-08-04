@@ -12,7 +12,16 @@ const updateFavoriteStatus = async (recipeId, userId) => {
 const getUserFavorites = async (userId) => {
   return Recipe.find({ favorites: userId });
 };
+
+const removeRecipeFromFavorites = async (recipeId, userId) => {
+  return Recipe.findByIdAndUpdate(
+    recipeId,
+    { $pull: { favorites: userId } },
+    { new: true, upsert: false }
+  );
+};
 module.exports = {
   updateFavoriteStatus,
   getUserFavorites,
+  removeRecipeFromFavorites,
 };

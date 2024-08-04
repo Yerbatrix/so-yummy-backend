@@ -10,5 +10,10 @@ router.post(
   favoritesController.addToFavorites
 );
 router.get("/api/user/favorite", auth, favoritesController.getFavorites);
+router.delete(
+  "/api/recipes/:id/favorite",
+  auth,
+  favoritesController.removeFromFavorites
+);
 
 module.exports = router;

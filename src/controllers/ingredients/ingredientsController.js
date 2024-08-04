@@ -20,27 +20,27 @@ const getIngredientsList = async (req, res, next) => {
   }
 };
 
-// const getReceipeByIngredient = async (req, res, next) => {
-//   try {
-//     const { query } = req;
+const getReceipeByIngredient = async (req, res, next) => {
+  try {
+    const { ttl } = req.query;
+    if (!ttl) {
+      return res.status(400).json({ message: "Missing query" });
+    }
 
-//     const results = await categoriesService.getCategories({
-//       ...query,
-//     });
+    const results = await ingredientsService.getReceipeByIngredients(ttl);
 
-//     console.log(query);
-//     res.json({
-//       status: "success",
-//       code: 200,
-//       data: { categories: results },
-//     });
-//   } catch (e) {
-//     console.error(e);
-//     next(e);
-//   }
-// };
+    res.json({
+      status: "success",
+      code: 200,
+      data: { recipes: results },
+    });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
 
 module.exports = {
   getIngredientsList,
-//   getReceipeByIngredient,
+  getReceipeByIngredient,
 };

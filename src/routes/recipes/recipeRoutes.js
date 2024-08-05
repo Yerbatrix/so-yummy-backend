@@ -37,7 +37,7 @@ const router = express.Router();
  *       404:
  *         description: No recipes found matching the keyword
  */
-router.get("/recipes/search", auth, searchRecipes);
+router.get("/recipes/search", searchRecipes);
 
 /**
  * @swagger
@@ -57,7 +57,7 @@ router.get("/recipes/search", auth, searchRecipes);
  *       500:
  *         description: Server error
  */
-router.get("/", auth, getRecipes);
+router.get("/", getRecipes);
 
 /**
  * @swagger
@@ -84,7 +84,7 @@ router.get("/", auth, getRecipes);
  *       500:
  *         description: Server error
  */
-router.get("/:id", auth, getRecipeById);
+router.get("/:id", getRecipeById);
 
 /**
  * @swagger
@@ -108,7 +108,7 @@ router.get("/:id", auth, getRecipeById);
  *       500:
  *         description: Server error
  */
-router.post("/", auth, createRecipe);
+router.post("/", createRecipe);
 
 /**
  * @swagger
@@ -131,6 +131,6 @@ router.post("/", auth, createRecipe);
  *       500:
  *         description: Server error
  */
-router.delete("/:id", auth, deleteRecipeById);
+router.delete("/:id", deleteRecipeById);
 
 module.exports = router;

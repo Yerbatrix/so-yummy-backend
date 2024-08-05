@@ -55,6 +55,7 @@ exports.signin = async (req, res, next) => {
 };
 
 exports.getUserInfo = async (req, res, next) => {
+  console.log(req);
   try {
     const user = await User.findById(req.user.id).select("-password -jwtToken");
     res.json(user);

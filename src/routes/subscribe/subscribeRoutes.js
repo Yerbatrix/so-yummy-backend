@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
+const passport = require("passport");
+const auth = passport.authenticate("jwt", { session: false });
 const subscribeController = require("../../controllers/subscribe/subscribeController");
 
 /**
@@ -29,6 +30,6 @@ const subscribeController = require("../../controllers/subscribe/subscribeContro
  *       404:
  *         description: You are already subscribed to our newsletter
  */
-router.post("/", subscribeController.subscription);
+router.post("/", auth, subscribeController.subscription);
 
 module.exports = router;

@@ -37,12 +37,13 @@ app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/recipes", recipeRoutes);
-app.use("/api/recipes", favoritesRoutes);
-app.use("/api/user", userFavoritesRoutes);
 app.use("/api/recipes/category-list", categoriesRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use("/api/ingredients",ingredientsRoutes);
+app.use("/api/favorites", favoritesRoutes);
+app.use("/api/user", userFavoritesRoutes);
+
+app.use("/api/recipes", recipeRoutes);
+app.use("/api/ingredients", ingredientsRoutes);
 
 app.use("/api/subscribe", subscribeRoutes);
 

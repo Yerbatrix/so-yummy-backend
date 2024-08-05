@@ -17,18 +17,11 @@ exports.register = async (req, res, next) => {
     newUser.setPassword(password);
     await newUser.save();
 
-    // Generowanie tokena JWT
-    const payload = { id: newUser._id, email: newUser.email };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
     res.status(201).json({
       user: {
-        name: newUser.name,
-        email: newUser.email,
+        name,
+        email,
       },
-      token,
     });
   } catch (err) {
     next(err);

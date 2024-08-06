@@ -1,4 +1,3 @@
-// const User = require("../models/User");
 const Recipe = require("../models/Recipe");
 
 const updateFavoriteStatus = async (recipeId, userId) => {
@@ -20,6 +19,7 @@ const removeRecipeFromFavorites = async (recipeId, userId) => {
     { new: true, upsert: false }
   );
 };
+
 module.exports = {
   updateFavoriteStatus,
   getUserFavorites,

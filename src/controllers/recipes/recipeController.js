@@ -41,6 +41,7 @@ const createRecipe = async (req, res) => {
     time,
     ingredients,
   } = req.body;
+
   try {
     const newRecipe = new Recipe({
       title,
@@ -52,7 +53,9 @@ const createRecipe = async (req, res) => {
       preview,
       time,
       ingredients,
+      author: req.user._id, // Przypisanie autora
     });
+
     const recipe = await newRecipe.save();
     res.status(201).json(recipe);
   } catch (err) {
@@ -70,7 +73,7 @@ const searchRecipes = async (req, res) => {
         .status(400)
         .json({ message: 'Parametr query "keyword" jest wymagany' });
     }
-    const regex = new RegExp(keyword, "i"); // Case-insensitive regex for partial match
+    const regex = new RegExp(keyword, "i");
     const recipes = await Recipe.find({ title: { $regex: regex } });
     if (recipes.length === 0) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
@@ -83,7 +86,7 @@ const searchRecipes = async (req, res) => {
 
 const deleteRecipeById = async (req, res) => {
   try {
-    const recipe = await Recipe.findByIdAndDelete(req.params._id);
+    const recipe = await Recipe.findByIdAndDelete(req.params.id);
     if (!recipe) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }

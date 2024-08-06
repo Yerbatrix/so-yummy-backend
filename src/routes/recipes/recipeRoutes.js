@@ -37,7 +37,7 @@ const router = express.Router();
  *       404:
  *         description: No recipes found matching the keyword
  */
-router.get("/recipes/search", searchRecipes);
+router.get("/search", searchRecipes);
 
 /**
  * @swagger
@@ -108,7 +108,7 @@ router.get("/:id", getRecipeById);
  *       500:
  *         description: Server error
  */
-router.post("/", createRecipe);
+router.post("/", auth, createRecipe);
 
 /**
  * @swagger

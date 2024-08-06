@@ -13,7 +13,7 @@ const auth = passport.authenticate("jwt", { session: false });
 
 /**
  * @swagger
- * /api/favorites/{id}/favorite:
+ * /api/favorites/{id}:
  *   post:
  *     summary: Dodaj przepis do ulubionych
  *     tags: [Favorites]
@@ -34,11 +34,11 @@ const auth = passport.authenticate("jwt", { session: false });
  *       500:
  *         description: Błąd serwera
  */
-router.post("/:id/favorite", auth, favoritesController.addToFavorites);
+router.post("/:id", auth, favoritesController.addToFavorites);
 
 /**
  * @swagger
- * /api/favorites/favorite:
+ * /api/favorites:
  *   get:
  *     summary: Pobierz ulubione przepisy
  *     tags: [Favorites]
@@ -52,11 +52,11 @@ router.post("/:id/favorite", auth, favoritesController.addToFavorites);
  *       500:
  *         description: Błąd serwera
  */
-router.get("/favorite", auth, favoritesController.getFavorites);
+router.get("/", auth, favoritesController.getFavorites);
 
 /**
  * @swagger
- * /api/favorites/{id}/favorite:
+ * /api/favorites/{id}:
  *   delete:
  *     summary: Usuń przepis z ulubionych
  *     tags: [Favorites]
@@ -77,5 +77,6 @@ router.get("/favorite", auth, favoritesController.getFavorites);
  *       500:
  *         description: Błąd serwera
  */
-router.delete("/:id/favorite", auth, favoritesController.removeFromFavorites);
+router.delete("/:id", auth, favoritesController.removeFromFavorites);
+
 module.exports = router;

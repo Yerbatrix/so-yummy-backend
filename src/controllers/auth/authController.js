@@ -1,12 +1,14 @@
-const { User } = require("../../models/User");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const { User } = require("../../models/User");
+const authService = require("../../services/authService");
 
 // signup
 exports.register = async (req, res, next) => {
   const { name, email, password } = req.body;
+
   try {
-    let existingUser = await User.findOne({ email });
+    let existingUser = await authService.checkEmailAddress(email);
     if (existingUser) {
       return res.status(409).json({ msg: "Email in use" });
     }
@@ -16,7 +18,6 @@ exports.register = async (req, res, next) => {
     });
     newUser.setPassword(password);
     await newUser.save();
-
     res.status(201).json({
       user: {
         name,
@@ -32,7 +33,7 @@ exports.register = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await authService.checkEmailAddress(email);
     if (!user || !user.validPassword(password)) {
       return res.status(401).json({ msg: "Email or password is wrong" });
     }
@@ -55,9 +56,8 @@ exports.signin = async (req, res, next) => {
 };
 
 exports.getUserInfo = async (req, res, next) => {
-  console.log(req);
   try {
-    const user = await User.findById(req.user.id).select("-password -jwtToken");
+    const user = await authService.getCurrentUser(req.user.id);
     res.json(user);
   } catch (err) {
     next(err);
@@ -67,9 +67,7 @@ exports.getUserInfo = async (req, res, next) => {
 exports.updateUserInfo = async (req, res, next) => {
   try {
     const updates = req.body;
-    const user = await User.findByIdAndUpdate(req.user.id, updates, {
-      new: true,
-    }).select("-password -jwtToken");
+    const user = await authService.updateUserData(req.user.id, updates);
     res.json(user);
   } catch (err) {
     next(err);
@@ -78,7 +76,7 @@ exports.updateUserInfo = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await authService.getCurrentUser(req.user.id);
     user.jwtToken = null;
     await user.save();
     res.json({ msg: "Logged out successfully" });

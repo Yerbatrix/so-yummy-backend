@@ -6,7 +6,9 @@ const getIngredients = async () => {
 };
 
 const getReceipeByIngredients = async (ttl) => {
-  const ingredient = await Ingredient.findOne({ ttl });
+  const ingredient = await Ingredient.findOne({
+    ttl: new RegExp(`^${ttl}$`, "i"),
+  });
 
   if (!ingredient) {
     return [];

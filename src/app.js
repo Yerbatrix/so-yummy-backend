@@ -13,6 +13,7 @@ const favoriteRoutes = require("./routes/favorite/favoriteRoutes");
 const ingredientsRoutes = require("./routes/ingredients/ingredientsRoutes");
 const categoriesRoutes = require("./routes/categories/categoriesListRoutes");
 const subscribeRoutes = require("./routes/subscribe/subscribeRoutes");
+const shoppingListRoutes = require("./routes/shoppingList/shoppingListRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const passport = require("./config/passport");
 dotenv.config();
@@ -34,12 +35,14 @@ app.use(cors());
 app.use(passport.initialize());
 
 // Routes
+
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes/category-list", categoriesRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/ingredients", ingredientsRoutes);
 app.use("/api/subscribe", subscribeRoutes);
+app.use("/api", shoppingListRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

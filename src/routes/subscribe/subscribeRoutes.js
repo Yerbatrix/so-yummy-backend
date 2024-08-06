@@ -10,6 +10,8 @@ const subscribeController = require("../../controllers/subscribe/subscribeContro
  *   post:
  *     summary: Subscribe to newsletter
  *     tags: [Subscribe]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -26,9 +28,11 @@ const subscribeController = require("../../controllers/subscribe/subscribeContro
  *       200:
  *         description: Subscription email sent
  *       400:
- *         description: Missing required field email
- *       404:
- *         description: You are already subscribed to our newsletter
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 router.post("/", auth, subscribeController.subscription);
 

@@ -17,11 +17,21 @@ exports.register = async (req, res, next) => {
       email,
     });
     newUser.setPassword(password);
+
+    // Generate JWT token
+    const payload = { id: newUser._id, email: newUser.email };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    newUser.jwtToken = token;
     await newUser.save();
+
     res.status(201).json({
+      token,
       user: {
         name,
         email,
+        subscription: newUser.subscription,
       },
     });
   } catch (err) {

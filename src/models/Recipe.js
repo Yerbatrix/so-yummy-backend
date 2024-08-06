@@ -51,6 +51,11 @@ const RecipeSchema = new mongoose.Schema(
     youtube: String,
     tags: [String],
     ingredients: [ingredientSchema],
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );

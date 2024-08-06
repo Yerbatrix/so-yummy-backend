@@ -46,6 +46,7 @@ app.use("/api/user", userFavoritesRoutes);
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/ingredients", ingredientsRoutes);
 app.use("/api/subscribe", subscribeRoutes);
+app.use("/api/")
 
 // Error handling middleware
 app.use(errorHandler);

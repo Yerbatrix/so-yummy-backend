@@ -82,10 +82,8 @@ const searchRecipes = async (req, res) => {
         .status(400)
         .json({ message: 'Parametr query "keyword" jest wymagany' });
     }
-    console.log('Szukane słowo kluczowe:', keyword);
     const regex = new RegExp(keyword, "i"); // Case-insensitive regex for partial match
     const recipes = await Recipe.find({ title: { $regex: regex } });
-    console.log('Znalezione przepisy:', recipes);
     if (recipes.length === 0) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }

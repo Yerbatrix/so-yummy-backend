@@ -135,7 +135,54 @@ router.post("/", auth, createRecipe);
  */
 router.delete("/:id", auth, deleteRecipeById);
 
-router.get('/', auth, getUserRecipes);
+/**
+ * @swagger
+ * /api/recipes/user:
+ *   get:
+ *     summary: Get recipes created by the authenticated user
+ *     tags: [Recipes]
+ *     responses:
+ *       200:
+ *         description: A list of the user's recipes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ *       500:
+ *         description: Server error
+ */
+
+router.get('/user', auth, getUserRecipes);
+
+/**
+ * @swagger
+ * /api/recipes/category/{category}:
+ *   get:
+ *     summary: Get recipes by category
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The category of the recipes to get
+ *     responses:
+ *       200:
+ *         description: A list of recipes in the category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ *       404:
+ *         description: No recipes found in the category
+ *       500:
+ *         description: Server error
+ */
 
 router.get('/category/:category', auth, getRecipesByCategory);
 

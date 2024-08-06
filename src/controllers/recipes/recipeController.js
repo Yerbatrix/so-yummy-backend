@@ -52,12 +52,24 @@ const createRecipe = async (req, res) => {
       preview,
       time,
       ingredients,
+      owner: req.user.id,
     });
     const recipe = await newRecipe.save();
     res.status(201).json(recipe);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
+  }
+};
+
+// Get recipes by category
+const getRecipesByCategory = async (req, res) => {
+  const { category } = req.params;
+  try {
+    const recipes = await Recipe.find({ category }).limit(8);;
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -70,8 +82,10 @@ const searchRecipes = async (req, res) => {
         .status(400)
         .json({ message: 'Parametr query "keyword" jest wymagany' });
     }
+    console.log('Szukane słowo kluczowe:', keyword);
     const regex = new RegExp(keyword, "i"); // Case-insensitive regex for partial match
     const recipes = await Recipe.find({ title: { $regex: regex } });
+    console.log('Znalezione przepisy:', recipes);
     if (recipes.length === 0) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }
@@ -81,12 +95,17 @@ const searchRecipes = async (req, res) => {
   }
 };
 
+//Delete recipe found by ID
 const deleteRecipeById = async (req, res) => {
   try {
     const recipe = await Recipe.findByIdAndDelete(req.params._id);
     if (!recipe) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }
+    if (recipe.owner.toString() !== req.user.id) {
+      return res.status(403).json({ message: "You are not authorized to delete this recipe" });
+    }
+    await recipe.remove();
     res.json({ message: "Recipe deleted successfully" });
   } catch (err) {
     console.error(err.message);
@@ -97,10 +116,22 @@ const deleteRecipeById = async (req, res) => {
   }
 };
 
+//Get list of own recipies
+const getUserRecipes = async (req, res) => {
+  try {
+    const recipes = await Recipe.find({ owner: req.user.id });
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
   getRecipes,
   getRecipeById,
   createRecipe,
   searchRecipes,
   deleteRecipeById,
+  getUserRecipes,
+  getRecipesByCategory,
 };

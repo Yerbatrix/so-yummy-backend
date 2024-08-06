@@ -5,6 +5,8 @@ const {
   createRecipe,
   searchRecipes,
   deleteRecipeById,
+  getUserRecipes,
+  getRecipesByCategory,
 } = require("../../controllers/recipes/recipeController");
 const passport = require("passport");
 const auth = passport.authenticate("jwt", { session: false });
@@ -37,7 +39,7 @@ const router = express.Router();
  *       404:
  *         description: No recipes found matching the keyword
  */
-router.get("/recipes/search", auth, searchRecipes);
+router.get("/search", auth, searchRecipes);
 
 /**
  * @swagger
@@ -132,5 +134,9 @@ router.post("/", auth, createRecipe);
  *         description: Server error
  */
 router.delete("/:id", auth, deleteRecipeById);
+
+router.get('/', auth, getUserRecipes);
+
+router.get('/category/:category', auth, getRecipesByCategory);
 
 module.exports = router;

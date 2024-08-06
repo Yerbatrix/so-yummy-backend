@@ -64,6 +64,17 @@ const createRecipe = async (req, res) => {
   }
 };
 
+//Get list of own recipies
+const getOwnRecipes = async (req, res) => {
+  console.log("Authenticated user:", req.user);
+  try {
+    const recipes = await Recipe.find({ author: req.user._id });
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 // Search recipes by keyword
 const searchRecipes = async (req, res) => {
   try {
@@ -81,6 +92,17 @@ const searchRecipes = async (req, res) => {
     res.json(recipes);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Get recipes by category
+const getRecipesByCategory = async (req, res) => {
+  const { category } = req.params;
+  try {
+    const recipes = await Recipe.find({ category }).limit(8);
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -104,6 +126,8 @@ module.exports = {
   getRecipes,
   getRecipeById,
   createRecipe,
+  getOwnRecipes,
   searchRecipes,
+  getRecipesByCategory,
   deleteRecipeById,
 };

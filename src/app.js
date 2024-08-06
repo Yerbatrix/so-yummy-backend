@@ -9,14 +9,12 @@ const cors = require("cors");
 const { swaggerUI, swaggerDocs } = require("./config/swagger");
 const authRoutes = require("./routes/auth/authRoutes");
 const recipeRoutes = require("./routes/recipes/recipeRoutes");
-const favoritesRoutes = require("./routes/favorite/favoriteRoutes");
-const userFavoritesRoutes = require("./routes/favorite/favoriteRoutes");
+const favoriteRoutes = require("./routes/favorite/favoriteRoutes");
 const ingredientsRoutes = require("./routes/ingredients/ingredientsRoutes");
 const categoriesRoutes = require("./routes/categories/categoriesListRoutes");
 const subscribeRoutes = require("./routes/subscribe/subscribeRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const passport = require("./config/passport");
-
 dotenv.config();
 
 const app = express();
@@ -39,9 +37,7 @@ app.use(passport.initialize());
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes/category-list", categoriesRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use("/api/favorites", favoritesRoutes);
-app.use("/api/user", userFavoritesRoutes);
-app.use("/api/recipes", recipeRoutes);
+app.use("/api/favorites", favoriteRoutes);
 app.use("/api/ingredients", ingredientsRoutes);
 app.use("/api/subscribe", subscribeRoutes);
 

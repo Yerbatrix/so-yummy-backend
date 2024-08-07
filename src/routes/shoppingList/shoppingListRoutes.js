@@ -16,7 +16,7 @@ router.post(
 );
 
 router.delete(
-  "/shopping-list",
+  "/shopping-list/:productId",
   auth,
   shoppingListController.deleteProductFromShoppingList
 );

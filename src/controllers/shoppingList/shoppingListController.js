@@ -33,19 +33,29 @@ const addIngredientToShoppingList = async (req, res) => {
   }
 };
 
-const deleteProductFromShoppingList = async (req,res)=> {
+const deleteProductFromShoppingList = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { user } = req;
+    const result = await shoppingListService.removeProductFromList(
+      productId,
+      user._id
+    );
+    res.json({
+      status: "success",
+      code: 200,
+      data: { productId, data: { result } },
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
 
-
-}
-
-const getProductsFromShoppingList = async (req,res)=> {
-
-
-}
+const getProductsFromShoppingList = async (req, res) => {};
 
 module.exports = {
   getIngredientsByRecipe,
   addIngredientToShoppingList,
   deleteProductFromShoppingList,
-  getProductsFromShoppingList
+  getProductsFromShoppingList,
 };

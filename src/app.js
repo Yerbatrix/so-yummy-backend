@@ -19,9 +19,15 @@ dotenv.config();
 
 const app = express();
 
-const uploadsDir = path.join(__dirname, "../uploads/avatars");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+const uploadsDirAvatars = path.join(__dirname, "../uploads/avatars");
+const uploadsDirRecipes = path.join(__dirname, "../uploads/recipes");
+
+if (!fs.existsSync(uploadsDirAvatars)) {
+  fs.mkdirSync(uploadsDirAvatars, { recursive: true });
+}
+
+if (!fs.existsSync(uploadsDirRecipes)) {
+  fs.mkdirSync(uploadsDirRecipes, { recursive: true });
 }
 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));

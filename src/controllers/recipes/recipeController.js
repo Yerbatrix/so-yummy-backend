@@ -1,4 +1,5 @@
 const Recipe = require("../../models/Recipe");
+const mongoose = require("mongoose");
 
 // Get all recipes
 const getRecipes = async (req, res) => {
@@ -30,30 +31,33 @@ const getRecipeById = async (req, res) => {
 
 // Add a recipe
 const createRecipe = async (req, res) => {
-  const {
-    title,
-    category,
-    area,
-    instructions,
-    description,
-    thumb,
-    preview,
-    time,
-    ingredients,
-  } = req.body;
+  const { title, category, instructions, description, time, ingredients } =
+    req.body;
 
   try {
+    // Sprawdź, czy plik został przesłany
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required" });
+    }
+
+    // Przekształć składniki na właściwy format
+    const parsedIngredients = JSON.parse(ingredients).map((ingredient) => ({
+      id: new mongoose.Types.ObjectId(ingredient.id),
+      measure: ingredient.measure,
+    }));
+
+    // Utwórz nowy przepis
     const newRecipe = new Recipe({
       title,
       category,
-      area,
+      area: "unknown",
       instructions,
       description,
-      thumb,
-      preview,
+      thumb: req.file.filename,
+      preview: req.file.filename,
       time,
-      ingredients,
-      author: req.user._id, // Przypisanie autora
+      ingredients: parsedIngredients,
+      author: req.user._id,
     });
 
     const recipe = await newRecipe.save();
@@ -64,7 +68,7 @@ const createRecipe = async (req, res) => {
   }
 };
 
-//Get list of own recipies
+//Get list of own recipes
 const getOwnRecipes = async (req, res) => {
   console.log("Authenticated user:", req.user);
   try {

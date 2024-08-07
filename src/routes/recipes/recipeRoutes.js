@@ -11,6 +11,7 @@ const {
 const passport = require("passport");
 const auth = passport.authenticate("jwt", { session: false });
 const router = express.Router();
+const upload = require("../../middleware/uploadRecipeImage");
 
 /**
  * @swagger
@@ -130,7 +131,7 @@ router.get("/:id", getRecipeById);
  *       500:
  *         description: Server error
  */
-router.post("/", auth, createRecipe);
+router.post("/", auth, upload.single("image"), createRecipe);
 
 /**
  * @swagger

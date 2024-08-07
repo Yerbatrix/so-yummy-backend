@@ -99,28 +99,48 @@ exports.logout = async (req, res, next) => {
 
 exports.uploadAvatar = async (req, res, next) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required" });
+    }
+
     const userId = req.user._id;
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    console.log("User found:", user);
+
+    // Delete old avatar if exists
     if (user.avatar) {
       const oldAvatarPath = path.join(
         __dirname,
         "../../../uploads/avatars",
         user.avatar
       );
+
+      console.log("Old avatar path:", oldAvatarPath);
+
+      // Check if the file exists before attempting to delete it
       try {
         if (fs.existsSync(oldAvatarPath)) {
           fs.unlinkSync(oldAvatarPath);
+          console.log("Old avatar deleted successfully");
+        } else {
+          console.log("File does not exist:", oldAvatarPath);
         }
       } catch (err) {
         console.log("Error accessing or deleting old avatar:", err.message);
       }
     }
+
+    // Update user with new avatar
     user.avatar = req.file.filename;
     await user.save();
+
+    console.log("New avatar saved for user:", user);
+
     res.json({ status: "success", code: 200, data: { avatar: user.avatar } });
   } catch (error) {
     next(error);

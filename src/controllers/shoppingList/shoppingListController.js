@@ -51,7 +51,17 @@ const deleteProductFromShoppingList = async (req, res) => {
   }
 };
 
-const getProductsFromShoppingList = async (req, res) => {};
+const getProductsFromShoppingList = async (req, res) => {
+  try {
+    const { user } = req;
+    const results = await shoppingListService.getProductsFromList({
+      owner: user._id,
+    });
+    res.json({ status: "success", code: 200, data: { results } });
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 module.exports = {
   getIngredientsByRecipe,

@@ -67,8 +67,13 @@ const removeProductFromList = async (productId, userId) => {
   return result;
 };
 
+const getProductsFromList = async () => {
+  return await ShoppingList.find();
+};
+
 module.exports = {
   getIngredientsByRecipeId,
   addProductToShoppingList,
   removeProductFromList,
+  getProductsFromList
 };

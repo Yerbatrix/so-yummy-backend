@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { User } = require("../../models/User");
 const authService = require("../../services/authService");
+const fs = require("fs");
+const path = require("path");
 
 // signup
 exports.register = async (req, res, next) => {
@@ -92,5 +94,35 @@ exports.logout = async (req, res, next) => {
     res.json({ msg: "Logged out successfully" });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.uploadAvatar = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.avatar) {
+      const oldAvatarPath = path.join(
+        __dirname,
+        "../../../uploads/avatars",
+        user.avatar
+      );
+      try {
+        if (fs.existsSync(oldAvatarPath)) {
+          fs.unlinkSync(oldAvatarPath);
+        }
+      } catch (err) {
+        console.log("Error accessing or deleting old avatar:", err.message);
+      }
+    }
+    user.avatar = req.file.filename;
+    await user.save();
+    res.json({ status: "success", code: 200, data: { avatar: user.avatar } });
+  } catch (error) {
+    next(error);
   }
 };

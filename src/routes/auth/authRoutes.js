@@ -6,9 +6,12 @@ const {
   getUserInfo,
   updateUserInfo,
   logout,
+  uploadAvatar,
 } = require("../../controllers/auth/authController");
 const passport = require("passport");
 const auth = passport.authenticate("jwt", { session: false });
+const upload = require("../../middleware/upload");
+
 /**
  * @swagger
  * /api/auth/register:
@@ -122,5 +125,35 @@ router.put("/user", auth, updateUserInfo);
  *         description: Unauthorized
  */
 router.post("/logout", auth, logout);
+
+/**
+ * @swagger
+ * /api/auth/avatar:
+ *   post:
+ *     summary: Upload user avatar
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Avatar uploaded successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+router.post("/avatar", auth, upload.single("avatar"), uploadAvatar);
 
 module.exports = router;

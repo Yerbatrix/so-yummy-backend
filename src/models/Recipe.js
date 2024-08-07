@@ -32,11 +32,11 @@ const RecipeSchema = new mongoose.Schema(
     },
     thumb: {
       type: String,
-      required: true,
+      required: false,
     },
     preview: {
       type: String,
-      required: true,
+      required: false,
     },
     time: {
       type: String,
@@ -54,7 +54,7 @@ const RecipeSchema = new mongoose.Schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
   },
   { timestamps: true }

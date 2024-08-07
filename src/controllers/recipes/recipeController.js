@@ -35,11 +35,6 @@ const createRecipe = async (req, res) => {
     req.body;
 
   try {
-    // Sprawdź, czy plik został przesłany
-    if (!req.file) {
-      return res.status(400).json({ message: "Image file is required" });
-    }
-
     // Przekształć składniki na właściwy format
     const parsedIngredients = JSON.parse(ingredients).map((ingredient) => ({
       id: new mongoose.Types.ObjectId(ingredient.id),
@@ -50,14 +45,14 @@ const createRecipe = async (req, res) => {
     const newRecipe = new Recipe({
       title,
       category,
-      area: "unknown",
+      area: "unknown", // Domyślna wartość
       instructions,
       description,
-      thumb: req.file.filename,
-      preview: req.file.filename,
+      thumb: req.file ? req.file.filename : null, // Przypisz nazwę pliku lub null
+      preview: req.file ? req.file.filename : null, // Przypisz nazwę pliku jako podgląd lub null
       time,
-      ingredients: parsedIngredients,
-      author: req.user._id,
+      ingredients: parsedIngredients, // Przekształcone składniki
+      author: req.user._id, // Przypisz autora
     });
 
     const recipe = await newRecipe.save();

@@ -17,7 +17,7 @@ const addIngredientToShoppingList = async (req, res) => {
     const { id } = req.params;
     const { user } = req;
 
-    const shoppingList = await shoppingListService.addIngredientToShoppingList(
+    const shoppingList = await shoppingListService.addProductToShoppingList(
       user._id,
       ingredientId,
       id
@@ -33,7 +33,19 @@ const addIngredientToShoppingList = async (req, res) => {
   }
 };
 
+const deleteProductFromShoppingList = async (req,res)=> {
+
+
+}
+
+const getProductsFromShoppingList = async (req,res)=> {
+
+
+}
+
 module.exports = {
   getIngredientsByRecipe,
   addIngredientToShoppingList,
+  deleteProductFromShoppingList,
+  getProductsFromShoppingList
 };

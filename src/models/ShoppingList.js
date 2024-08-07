@@ -10,6 +10,10 @@ const ShoppingListSchema = new Schema(
     },
     ingredients: [
       {
+        id: {
+          type: String,
+          required: true,
+        },
         ttl: {
           type: String,
           required: true,

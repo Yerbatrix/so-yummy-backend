@@ -15,4 +15,15 @@ router.post(
   shoppingListController.addIngredientToShoppingList
 );
 
+router.delete(
+  "/shopping-list",
+  auth,
+  shoppingListController.deleteProductFromShoppingList
+);
+router.get(
+  "/shopping-list",
+  auth,
+  shoppingListController.getProductsFromShoppingList
+);
+
 module.exports = router;

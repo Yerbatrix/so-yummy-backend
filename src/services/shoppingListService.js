@@ -27,7 +27,7 @@ const getIngredientsByRecipeId = async (id) => {
   return detailedIngredients;
 };
 
-const addIngredientToShoppingList = async (userId, ingredientId, recipeId) => {
+const addProductToShoppingList = async (userId, ingredientId, recipeId) => {
   try {
     const ingredientDetail = await Ingredient.findById(ingredientId);
     const recipe = await Recipe.findOne(
@@ -38,6 +38,7 @@ const addIngredientToShoppingList = async (userId, ingredientId, recipeId) => {
     const measure = recipe.ingredients[0].measure;
 
     const ingredient = {
+      id: ingredientDetail._id,
       ttl: ingredientDetail.ttl,
       measure: measure,
       thb: ingredientDetail.thb,
@@ -58,5 +59,5 @@ const addIngredientToShoppingList = async (userId, ingredientId, recipeId) => {
 
 module.exports = {
   getIngredientsByRecipeId,
-  addIngredientToShoppingList,
+  addProductToShoppingList,
 };

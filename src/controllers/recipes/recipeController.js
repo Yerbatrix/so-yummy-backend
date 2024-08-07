@@ -1,5 +1,7 @@
 const Recipe = require("../../models/Recipe");
 const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 
 // Get all recipes
 const getRecipes = async (req, res) => {
@@ -107,10 +109,29 @@ const getRecipesByCategory = async (req, res) => {
 
 const deleteRecipeById = async (req, res) => {
   try {
-    const recipe = await Recipe.findByIdAndDelete(req.params.id);
+    const recipe = await Recipe.findById(req.params.id);
     if (!recipe) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }
+
+    // Usuń plik obrazka, jeśli istnieje
+    if (recipe.thumb) {
+      const imagePath = path.join(
+        __dirname,
+        "../../../uploads/recipes",
+        recipe.thumb
+      );
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Failed to delete image:", err.message);
+        } else {
+          console.log("Image deleted:", imagePath);
+        }
+      });
+    }
+
+    await Recipe.findByIdAndDelete(req.params.id);
+
     res.json({ message: "Recipe deleted successfully" });
   } catch (err) {
     console.error(err.message);

@@ -60,7 +60,7 @@ const addProductToShoppingList = async (userId, ingredientId, recipeId) => {
 const removeProductFromList = async (productId, userId) => {
   const result = await ShoppingList.findOneAndUpdate(
     { owner: userId },
-    { $pull: { ingredients: { id: productId } } },
+    { $pull: { ingredients: { _id: productId } } },
     { new: true }
   );
 

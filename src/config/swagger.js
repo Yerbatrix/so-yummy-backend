@@ -213,6 +213,54 @@ const swaggerOptions = {
             },
           },
         },
+        ShoppingList: {
+          type: "object",
+          properties: {
+            _id: {
+              type: "string",
+              description: "The auto-generated id of the shopping list",
+            },
+            owner: {
+              type: "string",
+              description: "ID of the owner (user)",
+            },
+            ingredients: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  id: {
+                    type: "string",
+                    description: "ID of the ingredient",
+                  },
+                  ttl: {
+                    type: "string",
+                    description: "Title of the ingredient",
+                  },
+                  measure: {
+                    type: "string",
+                    description: "Measure of the ingredient",
+                  },
+                  thb: {
+                    type: "string",
+                    description: "Thumbnail image URL of the ingredient",
+                  },
+                },
+              },
+              description: "List of ingredients in the shopping list",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              description: "Date when the shopping list was created",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+              description: "Date when the shopping list was last updated",
+            },
+          },
+        },
       },
     },
   },

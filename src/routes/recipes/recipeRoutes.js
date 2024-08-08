@@ -6,6 +6,8 @@ const {
   getOwnRecipes,
   searchRecipes,
   getRecipesByCategory,
+  getRecipesByCategoryMain,
+  getPopularRecipes,
   deleteRecipeById,
 } = require("../../controllers/recipes/recipeController");
 const passport = require("passport");
@@ -84,6 +86,26 @@ router.get("/ownRecipes", auth, getOwnRecipes);
 
 /**
  * @swagger
+ * /api/recipes/popular:
+ *   get:
+ *     summary: Get popular recipes
+ *     tags: [Recipes]
+ *     responses:
+ *       200:
+ *         description: A list of popular recipes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ *       500:
+ *         description: Server error
+ */
+router.get("/popular", getPopularRecipes);
+
+/**
+ * @swagger
  * /api/recipes/{id}:
  *   get:
  *     summary: Get a recipe by ID
@@ -134,7 +156,7 @@ router.get("/:id", getRecipeById);
 router.post("/", auth, upload.single("image"), createRecipe);
 
 /**
- * @swagger
+ *  @swagger
  * /api/recipes/category/{category}:
  *   get:
  *     summary: Get recipes by category
@@ -146,6 +168,18 @@ router.post("/", auth, upload.single("image"), createRecipe);
  *           type: string
  *         required: true
  *         description: The category of the recipes to get
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: The page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 8
+ *         description: The number of recipes per page
  *     responses:
  *       200:
  *         description: A list of recipes in the category
@@ -161,6 +195,36 @@ router.post("/", auth, upload.single("image"), createRecipe);
  *         description: Server error
  */
 router.get("/category/:category", getRecipesByCategory);
+
+/**
+ * * @swagger
+* /api/recipes/main/{category}:
+*   get:
+*     summary: Get recipes by category for main page
+*     tags: [Recipes]
+*     parameters:
+*       - in: path
+*         name: category
+*         schema:
+*           type: string
+*         required: true
+*         description: The category of the recipes to get
+*     responses:
+*       200:
+*         description: A list of recipes in the category
+*         content:
+*           application/json:
+*             schema:
+*               type: array
+*               items:
+*                 $ref: '#/components/schemas/Recipe'
+*       404:
+*         description: No recipes found in the category
+*       500:
+*         description: Server error 
+ * 
+*/
+router.get("/main/:category", getRecipesByCategoryMain);
 
 /**
  * @swagger

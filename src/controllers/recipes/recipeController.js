@@ -96,13 +96,51 @@ const searchRecipes = async (req, res) => {
   }
 };
 
-// Get recipes by category
+// Get recipes by category - pagination added
 const getRecipesByCategory = async (req, res) => {
   const { category } = req.params;
+  const { page = 1, limit = 8 } = req.query;
+
   try {
-    const recipes = await Recipe.find({ category }).limit(8);
+    const recipes = await Recipe.find({ category })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .exec();
+
+    const count = await Recipe.countDocuments({ category });
+
+    res.status(200).json({
+      recipes,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get recipes by category for main page
+const getRecipesByCategoryMain = async (req, res) => {
+  const { category } = req.params;
+  try {
+    const recipes = await Recipe.find({ category });
     res.status(200).json(recipes);
   } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get popular recipes
+const getPopularRecipes = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 4;
+    const recipes = await Recipe.find({ "favorites.0": { $exists: true } })
+      .sort({ favorites: -1 })
+      .limit(limit);
+
+    res.status(200).json(recipes);
+  } catch (error) {
+    console.error(error.message);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -150,4 +188,6 @@ module.exports = {
   searchRecipes,
   getRecipesByCategory,
   deleteRecipeById,
+  getRecipesByCategoryMain,
+  getPopularRecipes,
 };

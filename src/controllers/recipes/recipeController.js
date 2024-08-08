@@ -1,4 +1,7 @@
 const Recipe = require("../../models/Recipe");
+const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 
 // Get all recipes
 const getRecipes = async (req, res) => {
@@ -30,30 +33,28 @@ const getRecipeById = async (req, res) => {
 
 // Add a recipe
 const createRecipe = async (req, res) => {
-  const {
-    title,
-    category,
-    area,
-    instructions,
-    description,
-    thumb,
-    preview,
-    time,
-    ingredients,
-  } = req.body;
+  const { title, category, instructions, description, time, ingredients } =
+    req.body;
 
   try {
+    // Przekształć składniki na właściwy format
+    const parsedIngredients = JSON.parse(ingredients).map((ingredient) => ({
+      id: new mongoose.Types.ObjectId(ingredient.id),
+      measure: ingredient.measure,
+    }));
+
+    // Utwórz nowy przepis
     const newRecipe = new Recipe({
       title,
       category,
-      area,
+      area: "unknown", // Domyślna wartość
       instructions,
       description,
-      thumb,
-      preview,
+      thumb: req.file ? req.file.filename : null, // Przypisz nazwę pliku lub null
+      preview: req.file ? req.file.filename : null, // Przypisz nazwę pliku jako podgląd lub null
       time,
-      ingredients,
-      author: req.user._id, // Przypisanie autora
+      ingredients: parsedIngredients, // Przekształcone składniki
+      author: req.user._id, // Przypisz autora
     });
 
     const recipe = await newRecipe.save();
@@ -64,7 +65,7 @@ const createRecipe = async (req, res) => {
   }
 };
 
-//Get list of own recipies
+//Get list of own recipes
 const getOwnRecipes = async (req, res) => {
   console.log("Authenticated user:", req.user);
   try {
@@ -146,10 +147,29 @@ const getPopularRecipes = async (req, res) => {
 
 const deleteRecipeById = async (req, res) => {
   try {
-    const recipe = await Recipe.findByIdAndDelete(req.params.id);
+    const recipe = await Recipe.findById(req.params.id);
     if (!recipe) {
       return res.status(404).json({ message: "Sorry! Recipe not found" });
     }
+
+    // Usuń plik obrazka, jeśli istnieje
+    if (recipe.thumb) {
+      const imagePath = path.join(
+        __dirname,
+        "../../../uploads/recipes",
+        recipe.thumb
+      );
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Failed to delete image:", err.message);
+        } else {
+          console.log("Image deleted:", imagePath);
+        }
+      });
+    }
+
+    await Recipe.findByIdAndDelete(req.params.id);
+
     res.json({ message: "Recipe deleted successfully" });
   } catch (err) {
     console.error(err.message);

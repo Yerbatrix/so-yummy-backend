@@ -216,7 +216,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ["./src/routes/**/*.js"],
+  apis: ["./src/routes/**/*.js"], // Upewnij się, że ścieżka obejmuje wszystkie pliki routerów
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);

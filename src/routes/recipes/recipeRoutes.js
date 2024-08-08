@@ -156,7 +156,7 @@ router.get("/:id", getRecipeById);
 router.post("/", auth, upload.single("image"), createRecipe);
 
 /**
- *  @swagger
+ * @swagger
  * /api/recipes/category/{category}:
  *   get:
  *     summary: Get recipes by category
@@ -197,33 +197,32 @@ router.post("/", auth, upload.single("image"), createRecipe);
 router.get("/category/:category", getRecipesByCategory);
 
 /**
- * * @swagger
-* /api/recipes/main/{category}:
-*   get:
-*     summary: Get recipes by category for main page
-*     tags: [Recipes]
-*     parameters:
-*       - in: path
-*         name: category
-*         schema:
-*           type: string
-*         required: true
-*         description: The category of the recipes to get
-*     responses:
-*       200:
-*         description: A list of recipes in the category
-*         content:
-*           application/json:
-*             schema:
-*               type: array
-*               items:
-*                 $ref: '#/components/schemas/Recipe'
-*       404:
-*         description: No recipes found in the category
-*       500:
-*         description: Server error 
- * 
-*/
+ * @swagger
+ * /api/recipes/main/{category}:
+ *   get:
+ *     summary: Get recipes by category for main page
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The category of the recipes to get
+ *     responses:
+ *       200:
+ *         description: A list of recipes in the category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ *       404:
+ *         description: No recipes found in the category
+ *       500:
+ *         description: Server error
+ */
 router.get("/main/:category", getRecipesByCategoryMain);
 
 /**
@@ -248,7 +247,5 @@ router.get("/main/:category", getRecipesByCategoryMain);
  *         description: Server error
  */
 router.delete("/:id", deleteRecipeById);
-
-
 
 module.exports = router;

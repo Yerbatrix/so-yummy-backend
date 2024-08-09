@@ -37,13 +37,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(
-  cors({
-    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"], // Zastąp to rzeczywistą domeną frontendową
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"], // Nagłówki, które chcesz udostępnić
-  })
-);
+app.use(cors());
 app.use(passport.initialize());
 
 app.use("/uploads/avatars", express.static(uploadsDirAvatars));

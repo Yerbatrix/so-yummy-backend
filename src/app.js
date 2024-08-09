@@ -37,9 +37,18 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://twoja-domena-frontendowa.com", // Zastąp to rzeczywistą domeną frontendową
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Jeśli używasz ciasteczek lub sesji
+    exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"], // Nagłówki, które chcesz udostępnić
+  })
+);
 app.use(passport.initialize());
 
+app.use("/uploads/avatars", express.static(uploadsDirAvatars));
+app.use("/uploads/recipes", express.static(uploadsDirRecipes));
 // Routes
 
 app.use("/api/auth", authRoutes);

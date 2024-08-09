@@ -39,9 +39,8 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(
   cors({
-    origin: "https://twoja-domena-frontendowa.com", // Zastąp to rzeczywistą domeną frontendową
+    origin: "https://soyummy-t4.netlify.app", // Zastąp to rzeczywistą domeną frontendową
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true, // Jeśli używasz ciasteczek lub sesji
     exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"], // Nagłówki, które chcesz udostępnić
   })
 );

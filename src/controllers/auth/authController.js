@@ -19,6 +19,15 @@ const registerSchema = Joi.object({
     .required(),
 });
 
+const signInSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string()
+    .pattern(/[A-Z]/)
+    .pattern(/[a-z]/)
+    .pattern(/\d/)
+    .required(),
+});
+
 // signup
 exports.register = async (req, res, next) => {
   const { error } = registerSchema.validate(req.body);
@@ -62,6 +71,11 @@ exports.register = async (req, res, next) => {
 
 // signin
 exports.signin = async (req, res, next) => {
+  const { error } = signInSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { email, password } = req.body;
   try {
     const user = await authService.checkEmailAddress(email);

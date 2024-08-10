@@ -19,7 +19,6 @@ const addRecipeSchema = Joi.object({
       })
     )
     .required(),
-  preparation: Joi.string().required(),
 });
 
 // Get all recipes
@@ -52,12 +51,22 @@ const getRecipeById = async (req, res) => {
 
 // Add a recipe
 const createRecipe = async (req, res) => {
+  const { error } = addRecipeSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { title, category, instructions, description, time, ingredients } =
     req.body;
 
   try {
     // Przekształć składniki na właściwy format
-    const parsedIngredients = JSON.parse(ingredients).map((ingredient) => ({
+    // const parsedIngredients = JSON.parse(ingredients).map((ingredient) => ({
+    //   id: new mongoose.Types.ObjectId(ingredient.id),
+    //   measure: ingredient.measure,
+    // }));
+
+    const ingredientsObject = ingredients.map((ingredient) => ({
       id: new mongoose.Types.ObjectId(ingredient.id),
       measure: ingredient.measure,
     }));
@@ -72,7 +81,7 @@ const createRecipe = async (req, res) => {
       thumb: req.file ? req.file.filename : null, // Przypisz nazwę pliku lub null
       preview: req.file ? req.file.filename : null, // Przypisz nazwę pliku jako podgląd lub null
       time,
-      ingredients: parsedIngredients, // Przekształcone składniki
+      ingredients: ingredientsObject, // Przekształcone składniki
       author: req.user._id, // Przypisz autora
     });
 

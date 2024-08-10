@@ -4,9 +4,28 @@ const { User } = require("../../models/User");
 const authService = require("../../services/authService");
 const fs = require("fs");
 const path = require("path");
+const Joi = require("joi");
+
+const registerSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .pattern(/^[a-zA-Z\s]+$/)
+    .required(),
+  email: Joi.string().email().required(),
+  password: Joi.string()
+    .pattern(/[A-Z]/)
+    .pattern(/[a-z]/)
+    .pattern(/\d/)
+    .required(),
+});
 
 // signup
 exports.register = async (req, res, next) => {
+  const { error } = registerSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { name, email, password } = req.body;
 
   try {

@@ -2,6 +2,25 @@ const Recipe = require("../../models/Recipe");
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const Joi = require("joi");
+
+const addRecipeSchema = Joi.object({
+  title: Joi.string().required(),
+  category: Joi.string().required(),
+  instructions: Joi.string().required(),
+  description: Joi.string().required(),
+  time: Joi.string().required(),
+
+  ingredients: Joi.array()
+    .items(
+      Joi.object({
+        id: Joi.string().required(),
+        measure: Joi.string().required(),
+      })
+    )
+    .required(),
+  preparation: Joi.string().required(),
+});
 
 // Get all recipes
 const getRecipes = async (req, res) => {

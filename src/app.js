@@ -31,13 +31,22 @@ if (!fs.existsSync(uploadsDirRecipes)) {
   fs.mkdirSync(uploadsDirRecipes, { recursive: true });
 }
 
+app.use("/uploads/avatars", express.static(uploadsDirAvatars));
+app.use("/uploads/recipes", express.static(uploadsDirRecipes));
+
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"],
+    credentials: true,
+  })
+);
+
 app.use(passport.initialize());
 
 app.use("/uploads/avatars", express.static(uploadsDirAvatars));

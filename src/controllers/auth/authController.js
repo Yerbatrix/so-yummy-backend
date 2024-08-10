@@ -28,6 +28,13 @@ const signInSchema = Joi.object({
     .required(),
 });
 
+const userNameSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .pattern(/^[a-zA-Z\s]+$/)
+    .required(),
+});
+
 // signup
 exports.register = async (req, res, next) => {
   const { error } = registerSchema.validate(req.body);
@@ -110,6 +117,11 @@ exports.getUserInfo = async (req, res, next) => {
 };
 
 exports.updateUserInfo = async (req, res, next) => {
+  const { error } = userNameSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   try {
     const updates = req.body;
     const user = await authService.updateUserData(req.user.id, updates);

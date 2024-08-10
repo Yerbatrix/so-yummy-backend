@@ -116,7 +116,7 @@ exports.uploadAvatar = async (req, res, next) => {
     if (user.avatar) {
       const oldAvatarPath = path.join(
         __dirname,
-        "../../../uploads/avatars",
+        "../../uploads/avatars",
         user.avatar
       );
 

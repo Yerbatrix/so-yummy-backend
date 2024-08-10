@@ -20,8 +20,8 @@ dotenv.config();
 
 const app = express();
 
-const uploadsDirAvatars = path.join(__dirname, "../uploads/avatars");
-const uploadsDirRecipes = path.join(__dirname, "../uploads/recipes");
+const uploadsDirAvatars = path.join(__dirname, "./uploads/avatars");
+const uploadsDirRecipes = path.join(__dirname, "./uploads/recipes");
 
 if (!fs.existsSync(uploadsDirAvatars)) {
   fs.mkdirSync(uploadsDirAvatars, { recursive: true });

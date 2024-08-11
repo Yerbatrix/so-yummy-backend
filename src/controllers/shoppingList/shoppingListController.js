@@ -54,15 +54,13 @@ const deleteProductFromShoppingList = async (req, res) => {
 const getProductsFromShoppingList = async (req, res) => {
   try {
     const { user } = req;
-    const results = await shoppingListService.getProductsFromList({
-      owner: user._id,
-    });
-    res.json({ status: "success", code: 200, data: { results } });
+    const result = await shoppingListService.getProductsFromList(user._id);
+    res.json({ status: "success", code: 200, data: { result } });
   } catch (e) {
     console.error(e);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 module.exports = {
   getIngredientsByRecipe,
   addIngredientToShoppingList,

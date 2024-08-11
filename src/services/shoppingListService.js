@@ -75,5 +75,5 @@ module.exports = {
   getIngredientsByRecipeId,
   addProductToShoppingList,
   removeProductFromList,
-  getProductsFromList
+  getProductsFromList,
 };

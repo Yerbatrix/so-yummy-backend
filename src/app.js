@@ -40,12 +40,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(
-  cors({
-    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"],
-    credentials: true,
-  })
-);
+app.use();
 
 app.use(passport.initialize());
 

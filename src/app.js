@@ -20,8 +20,8 @@ dotenv.config();
 
 const app = express();
 
-const uploadsDirAvatars = path.join(__dirname, "../uploads/avatars");
-const uploadsDirRecipes = path.join(__dirname, "../uploads/recipes");
+const uploadsDirAvatars = path.join(__dirname, "./uploads/avatars");
+const uploadsDirRecipes = path.join(__dirname, "./uploads/recipes");
 
 if (!fs.existsSync(uploadsDirAvatars)) {
   fs.mkdirSync(uploadsDirAvatars, { recursive: true });
@@ -31,15 +31,26 @@ if (!fs.existsSync(uploadsDirRecipes)) {
   fs.mkdirSync(uploadsDirRecipes, { recursive: true });
 }
 
+app.use("/uploads/avatars", express.static(uploadsDirAvatars));
+app.use("/uploads/recipes", express.static(uploadsDirRecipes));
+
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(helmet());
-app.use(cors());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use(
+  cors({
+    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"],
+    credentials: true,
+  })
+);
+
 app.use(passport.initialize());
 
+app.use("/uploads/avatars", express.static(uploadsDirAvatars));
+app.use("/uploads/recipes", express.static(uploadsDirRecipes));
 // Routes
 
 app.use("/api/auth", authRoutes);

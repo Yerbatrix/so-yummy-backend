@@ -115,7 +115,7 @@ const getRecipesByCategory = async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -126,7 +126,7 @@ const getRecipesByCategoryMain = async (req, res) => {
     const recipes = await Recipe.find({ category });
     res.status(200).json(recipes);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 

@@ -67,13 +67,13 @@ const removeProductFromList = async (productId, userId) => {
   return result;
 };
 
-const getProductsFromList = async () => {
-  return await ShoppingList.find();
+const getProductsFromList = async (userId) => {
+  return await ShoppingList.findOne({ owner: userId });
 };
 
 module.exports = {
   getIngredientsByRecipeId,
   addProductToShoppingList,
   removeProductFromList,
-  getProductsFromList
+  getProductsFromList,
 };

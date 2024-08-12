@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const helmet = require("helmet");
 const cors = require("cors");
 const { swaggerUI, swaggerDocs } = require("./config/swagger");
 const authRoutes = require("./routes/auth/authRoutes");
@@ -38,9 +39,10 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(
   cors({
-    origin: ["*"],
+    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"],
     credentials: true,
   })
 );

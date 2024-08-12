@@ -156,7 +156,7 @@ const deleteRecipeById = async (req, res) => {
     if (recipe.thumb) {
       const imagePath = path.join(
         __dirname,
-        "../../../uploads/recipes",
+        "../../uploads/recipes",
         recipe.thumb
       );
       fs.unlink(imagePath, (err) => {

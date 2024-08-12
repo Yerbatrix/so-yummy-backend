@@ -42,7 +42,6 @@ const addProductToShoppingList = async (userId, ingredientId, recipeId) => {
       ttl: ingredientDetail.ttl,
       measure: measure,
       thb: ingredientDetail.thb,
-      recipeId: recipeId,
     };
 
     const shoppingList = await ShoppingList.findOneAndUpdate(
@@ -58,10 +57,10 @@ const addProductToShoppingList = async (userId, ingredientId, recipeId) => {
   }
 };
 
-const removeProductFromList = async (productId, userId, recipeId) => {
+const removeProductFromList = async (productId, userId) => {
   const result = await ShoppingList.findOneAndUpdate(
     { owner: userId },
-    { $pull: { ingredients: { _id: productId, recipeId: recipeId } } },
+    { $pull: { ingredients: { _id: productId } } },
     { new: true }
   );
 

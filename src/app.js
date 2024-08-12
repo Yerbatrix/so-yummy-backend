@@ -39,11 +39,19 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 // Middleware
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+// Tymczasowa zmiana w Helmet, aby pozwalać na cross-origin loading
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false, // Wyłącza restrykcje wczytywania zasobów z innych źródeł
+  })
+);
+
+// Zmieniona konfiguracja CORS, aby pozwalać na wszystkie źródła
 app.use(
   cors({
-    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"],
-    credentials: true,
+    origin: "*", // Pozwala na wszystkie źródła
+    credentials: true, // Jeśli chcesz pozwolić na przesyłanie cookies
   })
 );
 
@@ -51,8 +59,8 @@ app.use(passport.initialize());
 
 app.use("/uploads/avatars", express.static(uploadsDirAvatars));
 app.use("/uploads/recipes", express.static(uploadsDirRecipes));
-// Routes
 
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes/category-list", categoriesRoutes);
 app.use("/api/recipes", recipeRoutes);

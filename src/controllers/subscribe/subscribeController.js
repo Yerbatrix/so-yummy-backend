@@ -1,7 +1,17 @@
 const { User } = require("../../models/User");
 const emailSubscription = require("../../email/email");
+const Joi = require("joi");
+
+const subscriptionSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
 
 const subscription = async (req, res) => {
+  const { error } = subscriptionSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { email } = req.body;
   const userId = req.user._id; // Assuming user ID is set in req.user by passport JWT authentication
   const user = await User.findById(userId);

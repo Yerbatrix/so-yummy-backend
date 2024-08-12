@@ -4,9 +4,44 @@ const { User } = require("../../models/User");
 const authService = require("../../services/authService");
 const fs = require("fs");
 const path = require("path");
+const Joi = require("joi");
+
+const registerSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .pattern(/^[a-zA-Z\s]+$/)
+    .required(),
+  email: Joi.string().email().required(),
+  password: Joi.string()
+    .pattern(/[A-Z]/)
+    .pattern(/[a-z]/)
+    .pattern(/\d/)
+    .required(),
+});
+
+const signInSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string()
+    .pattern(/[A-Z]/)
+    .pattern(/[a-z]/)
+    .pattern(/\d/)
+    .required(),
+});
+
+const userNameSchema = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .pattern(/^[a-zA-Z\s]+$/)
+    .required(),
+});
 
 // signup
 exports.register = async (req, res, next) => {
+  const { error } = registerSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { name, email, password } = req.body;
 
   try {
@@ -43,6 +78,11 @@ exports.register = async (req, res, next) => {
 
 // signin
 exports.signin = async (req, res, next) => {
+  const { error } = signInSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   const { email, password } = req.body;
   try {
     const user = await authService.checkEmailAddress(email);
@@ -77,6 +117,11 @@ exports.getUserInfo = async (req, res, next) => {
 };
 
 exports.updateUserInfo = async (req, res, next) => {
+  const { error } = userNameSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   try {
     const updates = req.body;
     const user = await authService.updateUserData(req.user.id, updates);

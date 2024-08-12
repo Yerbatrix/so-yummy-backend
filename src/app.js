@@ -42,7 +42,7 @@ app.use(morgan("dev"));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(
   cors({
-    origin: ["*"],
+    origin: ["https://soyummy-t4.netlify.app", "http://localhost:5173"],
     credentials: true,
   })
 );

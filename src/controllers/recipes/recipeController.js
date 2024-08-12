@@ -10,7 +10,6 @@ const addRecipeSchema = Joi.object({
   instructions: Joi.string().required(),
   description: Joi.string().required(),
   time: Joi.string().required(),
-
   ingredients: Joi.array()
     .items(
       Joi.object({
@@ -51,8 +50,6 @@ const getRecipeById = async (req, res) => {
 
 // Add a recipe
 const createRecipe = async (req, res) => {
-  console.log("Request body:", req.body);
-  console.log("Request file:", req.file);
   const { error } = addRecipeSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -62,12 +59,6 @@ const createRecipe = async (req, res) => {
     req.body;
 
   try {
-    // Przekształć składniki na właściwy format
-    // const parsedIngredients = JSON.parse(ingredients).map((ingredient) => ({
-    //   id: new mongoose.Types.ObjectId(ingredient.id),
-    //   measure: ingredient.measure,
-    // }));
-
     const ingredientsObject = ingredients.map((ingredient) => ({
       id: new mongoose.Types.ObjectId(ingredient.id),
       measure: ingredient.measure,

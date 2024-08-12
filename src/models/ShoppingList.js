@@ -1,6 +1,3 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-
 const ShoppingListSchema = new Schema(
   {
     owner: {
@@ -24,6 +21,11 @@ const ShoppingListSchema = new Schema(
         },
         thb: {
           type: String,
+          required: true,
+        },
+        recipeId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Recipe",
           required: true,
         },
       },

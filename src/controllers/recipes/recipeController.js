@@ -51,6 +51,8 @@ const getRecipeById = async (req, res) => {
 
 // Add a recipe
 const createRecipe = async (req, res) => {
+  console.log("Request body:", req.body);
+  console.log("Request file:", req.file);
   const { error } = addRecipeSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
